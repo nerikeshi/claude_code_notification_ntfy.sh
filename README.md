@@ -1,0 +1,2 @@
+# claude_code_notification_ntfy.sh
+ ntfy.shでclaude_codeの各種処理が終わった時に通知を行うスクリプトです
