@@ -79,37 +79,16 @@ INPUT=$(cat)
 PROJECT_NAME=$(basename "$(pwd)")
 
 TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
-USER_CMD=""
 RESULT=""
 
 if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ]; then
-    USER_CMD=$(jq -r 'select(.type == "user") | .message.content[] | select(.type == "text") | .text // empty' "$TRANSCRIPT_PATH" 2>/dev/null | \
-        grep -v "^\[Request interrupted" | \
-        tail -1 | \
-        tr '\n' ' ' | \
-        cut -c1-100)
-
     RESULT=$(jq -r 'select(.type == "assistant") | .message.content[] | select(.type == "text") | .text // empty' "$TRANSCRIPT_PATH" 2>/dev/null | \
         tail -1 | \
         tr '\n' ' ' | \
-        cut -c1-100)
+        cut -c1-200)
 fi
 
-MESSAGE=""
-if [ -n "$USER_CMD" ]; then
-    MESSAGE="Command: ${USER_CMD}"
-fi
-if [ -n "$RESULT" ]; then
-    if [ -n "$MESSAGE" ]; then
-        MESSAGE="${MESSAGE}
-Result: ${RESULT}"
-    else
-        MESSAGE="Result: ${RESULT}"
-    fi
-fi
-if [ -z "$MESSAGE" ]; then
-    MESSAGE="Task completed"
-fi
+MESSAGE="${RESULT:-Task completed}"
 
 curl -s \
     -H "Title: ${PROJECT_NAME}" \
