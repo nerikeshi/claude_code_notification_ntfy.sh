@@ -18,22 +18,14 @@ USER_CMD=""
 RESULT=""
 
 if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ]; then
-    # macOS: tail -r, Linux: tac
-    if command -v tac &> /dev/null; then
-        REVERSE_CMD="tac"
-    else
-        REVERSE_CMD="tail -r"
-    fi
-
-    USER_CMD=$($REVERSE_CMD "$TRANSCRIPT_PATH" 2>/dev/null | \
-        jq -r 'select(.type == "user") | select(.message.content[0].type == "text") | .message.content[0].text // empty' 2>/dev/null | \
-        head -1 | \
+    USER_CMD=$(jq -r 'select(.type == "user") | .message.content[] | select(.type == "text") | .text // empty' "$TRANSCRIPT_PATH" 2>/dev/null | \
+        grep -v "^\[Request interrupted" | \
+        tail -1 | \
         tr '\n' ' ' | \
         cut -c1-100)
 
-    RESULT=$($REVERSE_CMD "$TRANSCRIPT_PATH" 2>/dev/null | \
-        jq -r 'select(.type == "assistant") | .message.content[0].text // empty' 2>/dev/null | \
-        head -1 | \
+    RESULT=$(jq -r 'select(.type == "assistant") | .message.content[] | select(.type == "text") | .text // empty' "$TRANSCRIPT_PATH" 2>/dev/null | \
+        tail -1 | \
         tr '\n' ' ' | \
         cut -c1-100)
 fi
