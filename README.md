@@ -25,8 +25,8 @@ Claude Codeのタスク完了時に、[ntfy.sh](https://ntfy.sh/)でスマホに
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/YOUR_USERNAME/claude-code-ntfy-notify.git
-cd claude-code-ntfy-notify
+git clone https://github.com/nerikeshi/claude_code_notification_ntfy.sh.git
+cd claude_code_notification_ntfy.sh
 
 # 実行権限を付与
 chmod +x setup-claude-ntfy.sh
@@ -164,18 +164,6 @@ rm ~/.claude/scripts/ntfy-config
 - トピック名は**推測されにくい文字列**を使用してください
 - 公開サーバー(ntfy.sh)ではトピック名を知っている人は誰でも購読可能です
 - より高いセキュリティが必要な場合は[セルフホスト](https://docs.ntfy.sh/install/)を検討してください
-
-## 📝 LINE Notify からの移行
-
-LINE Notifyは2025年3月31日でサービス終了しました。ntfy.shは完全な代替となります。
-
-| 項目 | ntfy.sh | LINE Notify |
-|------|---------|-------------|
-| 料金 | 無料 | 無料だった |
-| アカウント | 不要 | LINE必須 |
-| トークン | 不要 | 必要 |
-| セルフホスト | 可能 | 不可 |
-| サービス継続性 | オープンソース | 2025/3終了 |
 
 ## 📚 参考リンク
 
